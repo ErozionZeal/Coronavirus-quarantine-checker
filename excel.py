@@ -86,6 +86,11 @@ class Win2:
 		row_count = sheet.max_row
 		ending_count = 0
 		quarantine_count = 0
+		new_filename = "{}.{}.{} Coronavirus quarantine report.xlsx".format(year, month, day)
+		workbook = Workbook()
+		new_sheet = workbook.active
+		row_index = 2
+		
   
 		for i in range(5, row_count):
 			if type(sheet.cell(row=i, column=15).value) is datetime.datetime:
@@ -94,10 +99,10 @@ class Win2:
 
 				if int(end_date.strftime("%Y")) == year and (int(end_date.strftime("%m")) > month or int(end_date.strftime("%d")) > day):
 					quarantine_count += 1
+					row_index += 1
 					for j in range(1,16):
-						cell = sheet.cell(row=i, column=j).value
-						q = Label(self.root, text=cell) 
-						q.grid(row=i+1, column=j) 
+						new_sheet.cell(row=row_index, column=j) =  sheet.cell(row=i, column=j).value
+						
 			
 			elif type(sheet.cell(row=i, column=15).value) == str:
 				start_date = sheet.cell(row=i, column=15).value.split('.')
@@ -105,15 +110,14 @@ class Win2:
 				try:
 					if int(end_date[0]) == year and (int(end_date[1]) > month or int(end_date[2]) > day):
 						quarantine_count += 1
+						row_index += 1
 						for j in range(1,16):
-							cell = sheet.cell(row=i, column=j).value
-							q = Label(self.root, text=cell) 
-							q.grid(row=i+1, column=j) 
+							new_sheet.cell(row=row_index, column=j) =  sheet.cell(row=i, column=j).value
 				except:
 					pass
 
-		self.output_data_q = Label(root, text="The {} people that need to be quarantined on {}.{}.{}".format(quarantine_count, year, month, day))
-		self.output_data_q.grid(row=0, column=0, columnspan=14)
+		new_sheet.cell(row = 2, column=j) = "The {} people that need to be quarantined on {}.{}.{}".format(quarantine_count, year, month, day)
+		row_placeholder = row_index
      
 		for i in range(5, row_count):
 			if type(sheet.cell(row=i, column=15).value) is datetime.datetime:
@@ -122,10 +126,9 @@ class Win2:
 
 				if int(end_date.strftime("%Y")) == year and int(end_date.strftime("%m")) and int(end_date.strftime("%d")) == day:
 					ending_count += 1
-					for j in range(1, 16):
-						cell = sheet.cell(row=i, column=j).value
-						e = Label(self.root, text=cell) 
-						e.grid(row=i+2+quarantine_count, column=j) 
+					row_index += 1
+					for j in range(1,16):
+						new_sheet.cell(row=row_index, column=j) =  sheet.cell(row=i, column=j).value
 			
 			elif type(sheet.cell(row=i, column=15).value) == str:
 				start_date = sheet.cell(row=i, column=15).value.split('.')
@@ -133,15 +136,14 @@ class Win2:
 				try:
 					if int(end_date.strftime("%Y")) == year and int(end_date.strftime("%m")) and int(end_date.strftime("%d")) == day:
 						ending_count += 1
-						for j in range(1, 16):
-							cell = sheet.cell(row=i, column=j).value
-							e = Label(self.root, text=cell) 
-							e.grid(row=i+2+quarantine_count, column=j) 
+						row_index += 1
+						for j in range(1,16):
+							new_sheet.cell(row=row_index, column=j) =  sheet.cell(row=i, column=j).value
 				except:
 					pass
 		 
-		self.output_data_e = Label(root, text="The {} people that are leaving quarantine on {}.{}.{}".format(ending_count, year, month, day))
-		self.output_data_e.grid(row=quarantine_count+1, column=0, columnspan=14) 	
+		new_sheet.cell(row = row_placeholder, column=j) = "The {} people that are leaving quarantine on {}.{}.{}".format(ending_count, year, month, day)
+		workbook.save(filename=new_filename)
 		
 		
 
