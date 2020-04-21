@@ -23,9 +23,8 @@ class Win:
     self.fontStyleMain = tkFont.Font(family="Lucida Grande", size=40)
     self.background_color2 = "#239BA9"
     self.root["bg"] = self.background_color
-    #self.main = tk.Frame(self.root)
-		#self.main.pack(fill=tk.BOTH, expand=True)
-    self.main_title = Label(root, text = 'Coronavirus Quarantine Tracker', bg=self.background_color, fg=self.text_color2, font=self.fontStyleMain)
+    #self.root.bind('<Return>', self.excel_click)
+    self.main_title = Label(root, text = 'Coronavirus Quarantine Tracker', bg=self.background_color, fg=self.text_color, font=self.fontStyleMain)
     self.main_title.grid(row=0, column=0, padx=40, pady=45, columnspan=9)
     self.excel_button = Button(root, text="Choose Excel File", command=self.excel_click, bg=self.background_color2, fg=self.text_color2, font=self.fontStyle)
     self.excel_button.grid(row=1, column=0, padx=40, pady=15, columnspan=9)
@@ -44,6 +43,7 @@ class Win:
     global filename 
     filename = filedialog.askopenfilename(initialdir = "/Desktop", title="Select the excel file", filetypes=[("Excel files", ".xlsx .xls")])
     if os.path.exists(filename): 
+      #self.root.bind('<Return>', self.data_click(self))
       self.success_label = Label(self.root, text="File chosen successfully", bg=self.background_color, fg=self.text_color, font=self.fontStyle)
       self.success_label.grid(row=2, column=0, padx=10, pady=15, columnspan=9)
       self.date_ask = Label(self.root, text="Enter today's date in this format: yyyy/mm/dd and then click Submit", bg=self.background_color, fg=self.text_color, font=self.fontStyle)
