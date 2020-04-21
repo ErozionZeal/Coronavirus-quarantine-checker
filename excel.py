@@ -6,6 +6,8 @@ from tkinter import filedialog
 from openpyxl import *
 from datetime import *
 import datetime
+import os
+import pathlib
 
 class Win:
 
@@ -77,9 +79,6 @@ class Win:
  
 class Win2:
 	def __init__(self, root):
-		self.root = root
-		self.root.geometry("1200x1200")
-		self.root["bg"] = "navy"
 		
 		wb = load_workbook(filename=filename)
 		sheet = wb.worksheets[0]
@@ -117,7 +116,7 @@ class Win2:
 					pass
 
 		new_sheet.cell(row = 2, column=j) = "The {} people that need to be quarantined on {}.{}.{}".format(quarantine_count, year, month, day)
-		row_placeholder = row_index
+		row_placeholder = row_index + 1
      
 		for i in range(5, row_count):
 			if type(sheet.cell(row=i, column=15).value) is datetime.datetime:
@@ -144,7 +143,8 @@ class Win2:
 		 
 		new_sheet.cell(row = row_placeholder, column=j) = "The {} people that are leaving quarantine on {}.{}.{}".format(ending_count, year, month, day)
 		workbook.save(filename=new_filename)
-		
+		path = pathlib.Path(__file__).parent.absolute()
+		os.system('start "excel" "{}{}"'.format(path, new_filename))
 		
 
 def main():
